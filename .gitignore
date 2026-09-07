@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.wav
+
+# Build and environments
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Tools
+vcpkg/
+.vs/
