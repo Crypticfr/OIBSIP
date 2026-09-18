@@ -12,6 +12,12 @@ dist/
 venv/
 env/
 
+# Database & Local Data
+*.db
+*.sqlite3
+*.csv
+
 # Tools
 vcpkg/
 .vs/
+

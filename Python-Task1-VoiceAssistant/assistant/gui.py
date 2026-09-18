@@ -11,7 +11,7 @@ import os
 
 INTERN_NAME = os.environ.get("OIBSIP_NAME", "Subhajit Samajpati")
 INTERN_TRACK = "Python Development"
-TASK_TITLE = "Voice Assistant (Level 1 - Task 1)"
+TASK_TITLE = "Voice Assistant (Task 1)"
 
 class VoiceAssistantGUI:
     def __init__(self, root: tk.Tk, show_splash: bool = True, splash_duration: int = 2800):
@@ -25,6 +25,7 @@ class VoiceAssistantGUI:
         self.speaker_buttons = []
         self.splash_frame = None
         self._splash_after_id = None
+        self._welcome_after_id = None
 
         # Register speech listener so TTS output appears in transcript
         self._speech_callback = lambda text: self.root.after(0, self._on_assistant_speech, text)
@@ -37,7 +38,7 @@ class VoiceAssistantGUI:
             self._show_splash_screen(duration_ms=splash_duration)
         else:
             self._build_ui()
-            self.root.after(500, self._welcome)
+            self._welcome_after_id = self.root.after(500, self._welcome)
 
     def _show_splash_screen(self, duration_ms: int = 2800):
         self.splash_frame = tk.Frame(self.root, bg="#11111b")
@@ -139,7 +140,7 @@ class VoiceAssistantGUI:
             self.splash_frame.destroy()
             self.splash_frame = None
             self._build_ui()
-            self.root.after(400, self._welcome)
+            self._welcome_after_id = self.root.after(400, self._welcome)
 
     def _build_ui(self):
         # 1. Header Frame
@@ -157,7 +158,7 @@ class VoiceAssistantGUI:
 
         subtitle_label = tk.Label(
             header_frame,
-            text="OIBSIP Python Development - Level 1 Task",
+            text="OIBSIP Python Development - Task 1",
             font=("Segoe UI", 9),
             fg="#a6adc8",
             bg="#181825"
@@ -297,6 +298,7 @@ class VoiceAssistantGUI:
         self.send_btn.pack(side=tk.RIGHT, fill=tk.Y)
 
     def _welcome(self):
+        self._welcome_after_id = None
         self._append_message("System", "Assistant is ready. Click 'Tap to Speak' or type a message below.", tag="sys_msg")
         threading.Thread(target=lambda: speak("Voice Assistant is ready. How can I help you?"), daemon=True).start()
 
@@ -423,6 +425,18 @@ class VoiceAssistantGUI:
         self.send_btn.config(state=tk.NORMAL)
 
     def _on_close(self):
+        if self._welcome_after_id:
+            try:
+                self.root.after_cancel(self._welcome_after_id)
+            except Exception:
+                pass
+            self._welcome_after_id = None
+        if self._splash_after_id:
+            try:
+                self.root.after_cancel(self._splash_after_id)
+            except Exception:
+                pass
+            self._splash_after_id = None
         remove_speech_listener(self._speech_callback)
         self.root.destroy()
 

@@ -1,6 +1,6 @@
-# Python Voice Assistant (Beginner Tier)
+# Python Voice Assistant (Task 1)
 
-This is a Python-based voice assistant built as part of the OIBSIP Python Development track.
+This is a Python-based voice assistant built as Task 1 of the OIBSIP Python Development track.
 It listens to spoken commands and responds with useful actions like greetings, telling the time, and performing web searches.
 
 ## Features Checklist
